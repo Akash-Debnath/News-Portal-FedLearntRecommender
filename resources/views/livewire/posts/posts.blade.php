@@ -51,7 +51,11 @@
                         <div class="px-6 pt-4 pb-2">
                             <a href="{{ url('dashboard/posts', $post->id) }}"
                                 class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
-                                Read post
+                                <form method="POST" action="{{ url('posts/views') }}">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $post->id }}" />
+                                    <button type="submit">Read post</button>
+                                </form>
                             </a>
                             <button wire:click="edit({{ $post->id }})"
                                 class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">

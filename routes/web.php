@@ -7,6 +7,7 @@ use App\Http\Livewire\Posts\Post as p;
 use App\Http\Livewire\Tags\Tagposts;
 use App\Http\Controllers\Api\CommentApiController;
 use App\Http\Controllers\LikeUnlikeController;
+use App\Http\Controllers\NewsViewController;
 use App\Http\Livewire\Tags\Tags;
 use Illuminate\Support\Facades\Route;
 
@@ -58,7 +59,13 @@ Route::get('dashboard/categories', Categories::class)->name('categories');
 Route::get('dashboard/categories/{id}/posts', Categoryposts::class);
 
 Route::get('dashboard/posts', Posts::class)->name('posts');
-Route::get('dashboard/posts/{id}', p::class);
+Route::match(['get'],'dashboard/posts/{id}', p::class)->name('postview');
+// Route::match(['post'],'dashboard/posts/{id}', [NewsViewController::class, 'edit']);
+// Route::match(['post'],'dashboard/posts/{id}', function () {
+//     return 'Hello World';
+// });
+// Route::get('dashboard/posts/{id}', p::class);
+// Route::post('dashboard/posts/{id}', [NewsViewController::class, 'store']);
 
 Route::get('dashboard/tags', Tags::class)->name('tags');
 Route::get('dashboard/tags/{id}/posts', Tagposts::class);
@@ -66,4 +73,5 @@ Route::get('dashboard/tags/{id}/posts', Tagposts::class);
 Route::post('comments/posts', [CommentApiController::class, 'store']);
 Route::post('likes/posts', [LikeUnlikeController::class, 'store']);
 Route::post('unlikes/posts', [LikeUnlikeController::class, 'unlikesreaction']);
+Route::post('posts/views', [NewsViewController::class, 'store']);
 
