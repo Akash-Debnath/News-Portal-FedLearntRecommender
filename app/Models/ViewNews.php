@@ -16,4 +16,8 @@ class ViewNews extends Model
         'author_id',
         'post_id',
     ];
+
+    // public function views(){
+    //     return $this->belongsToMany(Post::class, 'post_id', 'post_id');
+    // }
 }

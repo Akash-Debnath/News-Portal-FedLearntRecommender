@@ -44,6 +44,10 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'author_id', 'id');
     }
 
+    public function liked(){
+        return $this->hasMany(Like::class,'author_id', 'id');
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *

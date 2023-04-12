@@ -27,6 +27,7 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
+
     public function comments(){
         return $this->hasMany(Comment::class)->with(['author']);
     }
@@ -35,9 +36,14 @@ class Post extends Model
         return $this->hasMany(Like::class)->with(['author']);
     }
 
+    public function views(){
+        return $this->hasMany(ViewNews::class)->with(['author']);
+    }
+
     public function unlikes(){
         return $this->hasMany(Unlike::class)->with(['author']);
     }
+
 
     public function images(){
         return $this->hasMany(Image::class);

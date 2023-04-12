@@ -81,10 +81,13 @@
                             }
                         @endphp
                         @if($liked)
-                            <h5> {{ $post->likes->count() }} <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                                <path d="M7.493 18.75c-.425 0-.82-.236-.975-.632A7.48 7.48 0 016 15.375c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75 2.25 2.25 0 012.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23h-.777zM2.331 10.977a11.969 11.969 0 00-.831 4.398 12 12 0 00.52 3.507c.26.85 1.084 1.368 1.973 1.368H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 01-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227z" />
-                              </svg>
-                              </h5>
+                        <div>
+                            <h5> {{ $post->likes->count() }}
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                                    <path d="M7.493 18.75c-.425 0-.82-.236-.975-.632A7.48 7.48 0 016 15.375c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75 2.25 2.25 0 012.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23h-.777zM2.331 10.977a11.969 11.969 0 00-.831 4.398 12 12 0 00.52 3.507c.26.85 1.084 1.368 1.973 1.368H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 01-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227z" />
+                                </svg>
+                            </h5>
+                        </div>
                         @else
                             <button type="submit" class="btn btn-link">
                                 <i class="fa fa-heart" aria-hidden="true"></i>
@@ -111,10 +114,10 @@
 
                 @if ($post->comments->count())
                     <div class="text-base">
-                        <p class="text-gray-900 pt-2 pb-4">{{ $post->comments->count() }}
+                        <h4 class="text-green-900 pt-2 pb-4">{{ $post->comments->count() }}
                         @if ($post->comments->count() > 1) Comments @else Comment
                             @endif
-                        </p>
+                        </h4>
                         <div class="bg-gray-100 overflow-hidden shadow-xl px-6 pt-4">
                             @foreach ($post->comments as $comment)
                                 <div>
@@ -134,10 +137,12 @@
                     <div class="form-group">
                         <textarea class="form-control border border-dark" rows="3" cols="50" name="comment"></textarea>
                         <input type="hidden" name="id" value="{{ $post->id }}" />
-                    </div>
-                    <div class="col-md-2 mt-2 mt-md-0">
+
                         {{-- <input type="submit" class="btn btn-sm btn-info btn-block" value="Send"/> --}}
-                        <button type="submit" class="btn btn-success">Send</button>
+                        <button type="submit" class="btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                          </svg>
+                          </button>
                     </div>
                 </form>
             </div>

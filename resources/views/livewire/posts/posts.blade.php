@@ -54,7 +54,7 @@
                                 <form method="POST" action="{{ url('posts/views') }}">
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $post->id }}" />
-                                    <button type="submit">Read post</button>
+                                    <button type="submit">READ POST</button>
                                 </form>
                             </a>
                             <button wire:click="edit({{ $post->id }})"

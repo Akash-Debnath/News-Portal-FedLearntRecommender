@@ -23,4 +23,8 @@ class Like extends Model
     public function post(){
         return $this->belongsTo(Post::class);
     }
+
+    // public function views(){
+    //     return $this->belongsToMany(ViewNews::class, 'post_id', 'post_id');
+    // }
 }
