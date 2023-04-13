@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\CommentApiController;
 use App\Http\Controllers\LikeUnlikeController;
 use App\Http\Controllers\NewsViewController;
 use App\Http\Controllers\GenerateCSVController;
+use App\Http\Controllers\PythonModelController;
 use App\Http\Livewire\Tags\Tags;
 use Illuminate\Support\Facades\Route;
 
@@ -77,3 +78,5 @@ Route::post('unlikes/posts', [LikeUnlikeController::class, 'unlikesreaction']);
 Route::post('posts/views', [NewsViewController::class, 'store']);
 
 Route::get('/hey', [GenerateCSVController::class, 'index']);
+// Route::get('/dashboard/posts', [PythonModelController::class, 'index']);
+// Route::get('/dashboard/py', [PythonModelController::class, 'index']);

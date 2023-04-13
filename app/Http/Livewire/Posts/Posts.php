@@ -11,12 +11,15 @@ use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Symfony\Component\Process\Process; 
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 
 class Posts extends Component
 {
     use WithPagination;
     use WithFileUploads;
+    
 
     public $title, $content, $category, $post_id;
     public $tagids = array();
@@ -25,10 +28,20 @@ class Posts extends Component
 
     public function render()
     {
+        $process = new Process(['python3', '/Users/akashchandradebnath/Sites/laravel-news-main/storage/app/public/FLR.py']); 
+        $process->run(); 
+        if (!$process->isSuccessful()) { throw new ProcessFailedException($process); } 
+        $output = $process->getOutput();
+        // $recommendedpost = Post::find($output);
+        $outputArray = explode(' ', str_replace(['[', ']', '\n'], '', $output));
+        $recommendedPosts = Post::whereIn('id', $outputArray)->get();
+
+
         return view('livewire.posts.posts', [
             'posts' => Post::orderBy('id', 'desc')->paginate(),
             'categories' => Category::all(),
             'tags' => Tag::all(),
+            'recommendedPosts' => $recommendedPosts
             // 'categories' => Category::paginate(),
             // 'tags' => Tag::paginate(),
         ]);

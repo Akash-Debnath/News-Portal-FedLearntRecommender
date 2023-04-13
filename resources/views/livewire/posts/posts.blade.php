@@ -29,6 +29,7 @@
                 </div>
             @endif
 
+  
             @if (Request::getPathInfo() == '/dashboard/posts')
                 <button wire:click="create()"
                     class="inline-flex items-center px-4 py-2 my-3 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
@@ -39,7 +40,38 @@
             @if ($isOpen)
                 @include('livewire.posts.create')
             @endif
-            <div class="grid grid-flow-row grid-cols-3  gap-4">
+            @if (Request::getPathInfo() == '/dashboard/posts')
+            <div class="card-body">
+                <table class="table table-borderless table-info">
+                    <tr class="bg-gradient-olive">
+                        <td colspan="2">
+                            <div class="py-2 h6 m-0 text-center"><b>Recommended Article</b> </div>
+                        </td>
+                    </tr>
+                </table>
+                <div class="row">
+                    @foreach($recommendedPosts as $recommendedpost)
+                        <div class="col-md-4">
+                        <div class="card rounded overflow-hidden shadow-lg">
+                            {{-- <img class="card-img-top" src="" alt="Card image cap"> --}}
+                            <div class="card-body">
+                            <h5 class="card-title font-bold text-xl">{{ $recommendedpost->title ?? '' }}</h5>
+                            <p class="card-text pb-4">{{ Str::words($recommendedpost->content ?? '', 20, '...') }}</p>
+                            {{-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                            <form method="POST" action="{{ url('posts/views') }}">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $recommendedpost->id ?? '' }}" />
+                                <button type="submit" class="btn btn-primary">Read</button>
+                            </form>
+                            </div>
+                        </div>
+                        </div>
+                    @endforeach
+                </div>        
+            </div> 
+            @endif
+            
+            <div class="grid grid-flow-row grid-cols-3 gap-4">
                 @foreach ($posts as $post)
                     <div class="max-w-sm rounded overflow-hidden shadow-lg">
                         <div class="px-6 py-4">
@@ -58,7 +90,7 @@
                                 </form>
                             </a>
                             <button wire:click="edit({{ $post->id }})"
-                                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
+                                class="inline-flex items-center px-4 py-2 bg-yellow-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-700 active:bg-yellow-900 focus:outline-none focus:border-yellow-900 focus:shadow-outline-yellow disabled:opacity-25 transition ease-in-out duration-150">
                                 Edit
                             </button>
                             <button wire:click="delete({{ $post->id }})"
