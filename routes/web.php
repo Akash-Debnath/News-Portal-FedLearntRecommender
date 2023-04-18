@@ -55,6 +55,7 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
+    // return view('livewire.posts.posts');
 })->name('dashboard');
 
 Route::get('dashboard/categories', Categories::class)->name('categories');

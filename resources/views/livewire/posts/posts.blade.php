@@ -7,7 +7,7 @@
             <div class="navbar-nav">
                 <a class="nav-item nav-link active px-6" href="#"><b>News</b><span class="sr-only">(current)</span></a>
                 @foreach($categories as $category)
-                    <a class="nav-item nav-link px-3" href="{{ url('dashboard/categories/'. $category->id .'/posts') }}">{{ $category->title }}</a>
+                    <a class="nav-item nav-link px-3 {{ ($category->id) ==  ($currentCategoryId ?? '') ? 'active' : '' }}" href="{{ url('dashboard/categories/'. $category->id .'/posts') }}">{{ $category->title }}</a>
                 @endforeach
             </div>
         </div>
@@ -42,42 +42,69 @@
             @endif
             @if (Request::getPathInfo() == '/dashboard/posts')
             <div class="card-body">
-                <table class="table table-borderless table-info">
+                <table class="table table-borderless table-success">
                     <tr class="bg-gradient-olive">
                         <td colspan="2">
-                            <div class="py-2 h6 m-0 text-center"><b>Recommended Article</b> </div>
+                            <div class="py-2 h6 m-0 text-center"><b>Recommended Articles</b> </div>
                         </td>
                     </tr>
                 </table>
                 <div class="row">
                     @foreach($recommendedPosts as $recommendedpost)
                         <div class="col-md-4">
-                        <div class="card rounded overflow-hidden shadow-lg">
-                            {{-- <img class="card-img-top" src="" alt="Card image cap"> --}}
-                            <div class="card-body">
-                            <h5 class="card-title font-bold text-xl">{{ $recommendedpost->title ?? '' }}</h5>
-                            <p class="card-text pb-4">{{ Str::words($recommendedpost->content ?? '', 20, '...') }}</p>
-                            {{-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
-                            <form method="POST" action="{{ url('posts/views') }}">
-                                @csrf
-                                <input type="hidden" name="id" value="{{ $recommendedpost->id ?? '' }}" />
-                                <button type="submit" class="btn btn-primary">Read</button>
-                            </form>
+                            <div class="card rounded overflow-hidden shadow-lg">
+                                {{-- <img class="card-img-top" src="" alt="Card image cap"> --}}
+                                @foreach($recommendedpost->images as $key => $image)
+                                    @if($key == 0)
+                                        <div class="px-6 py-4">
+                                            <img src="{{ $image->url }}" alt="{{ $image->description }}" width="300" height="200">
+                                        </div>
+                                    @endif
+                                @endforeach
+                                <div class="card-body">
+                                    <h5 class="card-title font-bold text-xl">{{ $recommendedpost->title ?? '' }}</h5>
+                                    <p class="card-text pb-4">{{ Str::words($recommendedpost->content ?? '', 10, '...') }}</p>
+                                    {{-- <a href="#" class="btn btn-primary">Go somewhere</a> --}}
+                                    <form method="POST" action="{{ url('posts/views') }}">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $recommendedpost->id ?? '' }}" />
+                                        <button type="submit" class="btn btn-primary">Read</button>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
                         </div>
                     @endforeach
                 </div>        
             </div> 
             @endif
             
+            <table class="table table-borderless table-info">
+                <tr class="bg-gradient-olive">
+                    <td colspan="2">
+                        <div class="py-2 h6 m-0 text-center"><b>Articles</b> </div>
+                    </td>
+                </tr>
+            </table>
             <div class="grid grid-flow-row grid-cols-3 gap-4">
                 @foreach ($posts as $post)
                     <div class="max-w-sm rounded overflow-hidden shadow-lg">
                         <div class="px-6 py-4">
+                            {{-- @foreach ($post->images as $image)
+                                <div class="px-6 py-4">
+                                    <img src="{{ $image->url }}" alt="hey" width="300" height="200">
+                                </div>
+                            @endforeach --}}
+                            @foreach($post->images as $key => $image)
+                                @if($key == 0)
+                                    <div class="px-6 py-4">
+                                        <img src="{{ $image->url }}" alt="{{ $image->description }}" width="300" height="200">
+                                    </div>
+                                @endif
+                            @endforeach
+
                             <div class="font-bold text-xl mb-2">{{ $post->title }}</div>
                             <p class="text-gray-700 text-base">
-                                {{ Str::words($post->content, 20, '...') }}
+                                {{ Str::words($post->content, 10, '...') }}
                             </p>
                         </div>
                         <div class="px-6 pt-4 pb-2">

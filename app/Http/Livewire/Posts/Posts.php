@@ -13,6 +13,9 @@ use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Symfony\Component\Process\Process; 
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Intervention\Image\ImageManagerStatic as Image2;
+
+
 
 
 class Posts extends Component
@@ -38,7 +41,7 @@ class Posts extends Component
 
 
         return view('livewire.posts.posts', [
-            'posts' => Post::orderBy('id', 'desc')->paginate(),
+            'posts' => Post::orderBy('id', 'desc')->paginate(6),
             'categories' => Category::all(),
             'tags' => Tag::all(),
             'recommendedPosts' => $recommendedPosts
@@ -53,7 +56,7 @@ class Posts extends Component
             'title' => 'required',
             'content' => 'required',
             'category' => 'required',
-            'photos.*' => 'image|max:1024',
+            'photos.*' => 'image|max:5120',
         ]);
 
         // Update or Insert Post

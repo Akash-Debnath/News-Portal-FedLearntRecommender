@@ -28,9 +28,10 @@ class Categoryposts extends Component
     public function render()
     {
         return view('livewire.posts.posts', [
-            'posts' => Post::where('category_id', $this->cid)->orderBy('id', 'desc')->paginate(),
+            'posts' => Post::where('category_id', $this->cid)->orderBy('id', 'desc')->paginate(6),
             'categories' => Category::all(),
             'tags' => Tag::all(),
+            'currentCategoryId' => $this->cid
         ]);
     }
 

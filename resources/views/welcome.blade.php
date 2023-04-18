@@ -21,10 +21,19 @@
         </style>
     </head>
     <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
+        <div class="container">
+            <div class="row">
+              <div class="col">
+                <marquee behavior="scroll" direction="left"><strong>We Believe in Safety</strong></marquee>
+              </div>
+            </div>
+        </div>
+        <div class="relative flex items-top justify-center min-h-screen bg-white-100 dark:bg-white-900 sm:items-center sm:pt-0">
             <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
+                <p id="slogan-text" class="fw-bolder"></p>
                 <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
-                    <h1>NSTU News Portal</h1>
+                    <img src="{{ asset('nstunewslogo.png') }}" alt="IIT" width="300" height="300">
+                    <h1><strong>NSTU News Portal</strong></h1>
                 </div>
 
                 <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
@@ -33,12 +42,12 @@
                             @if (Route::has('login'))
                             <div class="hidden fixed sm:block">
                                 @auth
-                                    <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 underline">Dashboard</a>
+                                    <a href="{{ url('/dashboard') }}" class="text-lg text-gray-700 underline">Dashboard</a>
                                 @else
-                                    <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Login</a>
+                                    <a href="{{ route('login') }}" class="text-lg text-gray-700 underline"><b>Login</b></a>
             
                                     @if (Route::has('register'))
-                                        <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 underline">Register</a>
+                                        <a href="{{ route('register') }}" class="ml-4 text-lg text-gray-700 underline"><b>Register</b></a>
                                     @endif
                                 @endif
                             </div>
@@ -49,4 +58,27 @@
             </div>
         </div>
     </body>
+    <script>
+        new TypeIt("#slogan-text", {})
+            .type("You are essential")
+            .move(-10)
+            .delete(4)
+            .type("r voice is ")
+            .move(null, {
+                to: "END"
+            })
+            .pause(2000)
+            .delete()
+            .type("“Never be afraid of the moments <br> thus sings the voice of the everlasting.”<br> - <b>Rabindranath Tagore</b>")
+            .pause(2000)
+            .delete()
+            .type("“Our lives begin to end the day <br> we become silent about the things that matter.”<br> - <b>Martin Luther King, Jr.</b>")
+            .pause(2000)
+            .delete()
+            .type("“When the whole world is silent,<br>even one voice becomes powerful.”<br> - <b>Malala Yousafzai</b>")
+            .pause(2000)
+            .delete()
+            .type("“Nothing strengthens authority <br> so much as silence.”<br> - <b>Leonardo Da Vinci</b>")
+            .go();
+    </script>
 </html>
