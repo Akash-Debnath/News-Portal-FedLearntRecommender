@@ -14,6 +14,8 @@ use Livewire\WithPagination;
 use Symfony\Component\Process\Process; 
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Intervention\Image\ImageManagerStatic as Image2;
+use League\Csv\Writer;
+use Illuminate\Support\Facades\Storage;
 
 
 
@@ -31,9 +33,24 @@ class Posts extends Component
 
     public function render()
     {
+        $posts = Post::withCount('likes', 'comments', 'views')->get();
+        $csv = Writer::createFromString('');
+        $csv->insertOne(['Post ID', 'Likes', 'Comments', 'Views']);
+
+        foreach ($posts as $post) {
+            $csv->insertOne([$post->id, $post->likes_count, $post->comments_count, $post->views_count]);
+        }
+
+        $filename = 'usersdata.csv';
+        $filepath = 'public/' . $filename;
+        Storage::put($filepath, $csv->__toString());
+
+
         $process = new Process(['python3', '/Users/akashchandradebnath/Sites/laravel-news-main/storage/app/public/FLR.py']); 
         $process->run(); 
-        if (!$process->isSuccessful()) { throw new ProcessFailedException($process); } 
+        // if (!$process->isSuccessful()) { 
+        //     throw new ProcessFailedException($process);
+        // } 
         $output = $process->getOutput();
         // $recommendedpost = Post::find($output);
         $outputArray = explode(' ', str_replace(['[', ']', '\n'], '', $output));
