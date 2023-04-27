@@ -15,11 +15,15 @@
                       </div>
                     </div>
                 @endif
+
+                @if (!Auth::user() == null && Auth::user()->can('categories-create'))
                 <button
                     wire:click="create()"
                     class="inline-flex items-center px-4 py-2 my-3 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
                     Create New Category
                 </button>
+                @endif
+
                 @if($isOpen)
                     @include('livewire.categories.create')
                 @endif
@@ -40,19 +44,23 @@
                             <td class="border px-4 py-2">{{ $category->title }}</td>
                             <td class="border px-4 py-2"><span style="background-color: {{ $category->color }};">&emsp;</span> {{ $category->color }}</td>
                             <td class="border px-4 py-2">
-                            <button
-                                wire:click="edit({{ $category->id }})"
-                                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
-                                Edit
-                            </button>
-                            <a href="{{ url('dashboard/categories/'. $category->id .'/posts') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
-                                Show Posts
-                            </a>
-                            <button
-                                wire:click="delete({{ $category->id }})"
-                                class="inline-flex items-center justify-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red active:bg-red-600 transition ease-in-out duration-150">
-                                Delete
-                            </button>
+                                @if (!Auth::user() == null && Auth::user()->can('categories-edit'))
+                                    <button
+                                        wire:click="edit({{ $category->id }})"
+                                        class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
+                                        Edit
+                                    </button>
+                                @endif
+                                <a href="{{ url('dashboard/categories/'. $category->id .'/posts') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
+                                    Show Posts
+                                </a>
+                                @if (!Auth::user() == null && Auth::user()->can('categories-delete'))
+                                    <button
+                                        wire:click="delete({{ $category->id }})"
+                                        class="inline-flex items-center justify-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red active:bg-red-600 transition ease-in-out duration-150">
+                                        Delete
+                                    </button>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

@@ -1,11 +1,10 @@
 <?php
-/**
- * @author MDITech <mditech.net@gmail.com>
- */
+
 
 namespace App\Http\Livewire\Tags;
 
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Tag;
 use Livewire\Component;
@@ -26,34 +25,49 @@ class Tags extends Component
 
     public function store()
     {
-        $this->validate([
-            'title' => 'required',
-        ]);
+        if (!Auth::user() == null && Auth::user()->can('tag-create')){ 
+            $this->validate([
+                'title' => 'required',
+            ]);
 
-        Tag::updateOrCreate(['id' => $this->tag_id], [
-            'title' => $this->title,
-        ]);
+            Tag::updateOrCreate(['id' => $this->tag_id], [
+                'title' => $this->title,
+            ]);
 
-        session()->flash('message',
-            $this->tag_id ? 'Tag Updated Successfully.' : 'Tag Created Successfully.');
+            session()->flash('message',
+                $this->tag_id ? 'Tag Updated Successfully.' : 'Tag Created Successfully.');
 
-        $this->closeModal();
-        $this->resetInputFields();
+            $this->closeModal();
+            $this->resetInputFields();
+        } else {
+            session()->flash('message', 'You are not able to go through!');
+            return redirect()->back();        
+        }
     }
 
     public function delete($id)
     {
-        Tag::find($id)->delete();
-        session()->flash('message', 'Tag Deleted Successfully.');
+        if (!Auth::user() == null && Auth::user()->can('tag-delete')){ 
+            Tag::find($id)->delete();
+            session()->flash('message', 'Tag Deleted Successfully.');
+        } else {
+            session()->flash('message', 'You are not able to go through!');
+            return redirect()->back();        
+        }
     }
 
     public function edit($id)
     {
-        $tag = Tag::findOrFail($id);
-        $this->tag_id = $id;
-        $this->title = $tag->title;
+        if (!Auth::user() == null && Auth::user()->can('tag-edit')){ 
+            $tag = Tag::findOrFail($id);
+            $this->tag_id = $id;
+            $this->title = $tag->title;
 
-        $this->openModal();
+            $this->openModal();
+        } else {
+            session()->flash('message', 'You are not able to go through!');
+            return redirect()->back();        
+        }
     }
 
     public function create()

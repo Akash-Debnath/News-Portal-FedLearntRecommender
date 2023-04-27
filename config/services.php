@@ -30,4 +30,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'onedrive' => [
+        'client_id' => env('874dbdb5-86d1-4608-9f17-0fa51d18ce2d'),
+        'client_secret' => env('8604cb22-a8f9-4587-ac75-8ea30dfe46c1'),
+        'redirect' => env('api://874dbdb5-86d1-4608-9f17-0fa51d18ce2d'),
+    ],
+
 ];

@@ -70,7 +70,14 @@
                         @csrf
                         <input type="hidden" name="id" value="{{ $post->id }}" />
                         @php 
-                            $userID = Auth::user()->id;
+                            // $userID = Auth::user()->id;
+                            if (!Auth::user()== null) {
+                                $userID = Auth::user()->id;
+                            } else {
+                                // $views->author_id = $_SERVER['REMOTE_ADDR']; // Use IP address
+                                // $views->author_id = exec('getmac'); // Use MAC address on Windows
+                                $userID = shell_exec('ifconfig -a | grep ether | head -n 1 | awk \'{print $2}\''); // Use MAC address on Unix/Linux
+                            }
                             $liked = false;
                             foreach($post->likes as $likeInfo) {
                                 if($likeInfo->author_id == $userID) {
@@ -94,7 +101,11 @@
                             </div>                            
                         </div>
                         @else
-                            <button type="submit" class="btn btn-link">
+                            @if(!Auth::user() == null)
+                                <button type="submit" class="btn btn-link">
+                            @else
+                                <button type="submit" class="btn btn-link" disabled>
+                            @endif
                                 {{-- <i class="fa fa-heart" aria-hidden="true"></i> --}}
                                 <div class="flex flex-row pr-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -141,11 +152,19 @@
                 <form method="post" action="{{ url('comments/posts') }}">
                     @csrf
                     <div class="form-group">
-                        <textarea class="form-control border border-dark mb-2" rows="3" cols="40" name="comment"></textarea>
-                        <input type="hidden" name="id" value="{{ $post->id }}" />
-
+                        @if(!Auth::user() == null)
+                            <textarea class="form-control border border-dark mb-2" rows="3" cols="40" name="comment"></textarea>
+                            <input type="hidden" name="id" value="{{ $post->id }}" />
+                        @else
+                            <textarea class="form-control border border-dark mb-2" rows="3" cols="40" name="comment" disabled></textarea>
+                        @endif
                         {{-- <input type="submit" class="btn btn-sm btn-info btn-block" value="Send"/> --}}
-                        <button type="submit" class="btn btn-success">
+                        @if(!Auth::user() == null)
+                            <button type="submit" class="btn btn-success">
+                        @else
+                            <button type="submit" class="btn btn-success fa fa-arrow-circle-down fa-3x custom-color" disabled>
+                        @endif
+
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                                 <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
                             </svg>

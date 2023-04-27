@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Categories;
 
 use App\Models\Category;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 
 class Categories extends Component
 {
@@ -18,39 +19,54 @@ class Categories extends Component
 
     public function store()
     {
-        $this->validate([
-            'title' => 'required',
-            'color' => 'required',
-        ]);
+        if (!Auth::user() == null && Auth::user()->can('categories-create')){ 
+            $this->validate([
+                'title' => 'required',
+                'color' => 'required',
+            ]);
 
-        Category::updateOrCreate(['id' => $this->category_id], [
-            'title' => $this->title,
-            'color' => $this->color
-        ]);
+            Category::updateOrCreate(['id' => $this->category_id], [
+                'title' => $this->title,
+                'color' => $this->color
+            ]);
 
-        session()->flash(
-            'message',
-            $this->category_id ? 'Category Updated Successfully.' : 'Category Created Successfully.'
-        );
+            session()->flash(
+                'message',
+                $this->category_id ? 'Category Updated Successfully.' : 'Category Created Successfully.'
+            );
 
-        $this->closeModal();
-        $this->resetInputFields();
+            $this->closeModal();
+            $this->resetInputFields();
+        } else {
+            session()->flash('message', 'You are not able to go through!');
+            return redirect()->back();        
+        }
     }
 
     public function delete($id)
     {
-        Category::find($id)->delete();
-        session()->flash('message', 'Category Deleted Successfully.');
+        if (!Auth::user() == null && Auth::user()->can('categories-delete')){ 
+            Category::find($id)->delete();
+            session()->flash('message', 'Category Deleted Successfully.');
+        } else {
+            session()->flash('message', 'You are not able to go through!');
+            return redirect()->back();        
+        }
     }
 
     public function edit($id)
     {
-        $category = Category::findOrFail($id);
-        $this->category_id = $id;
-        $this->title = $category->title;
-        $this->color = $category->color;
+        if (!Auth::user() == null && Auth::user()->can('categories-edit')){ 
+            $category = Category::findOrFail($id);
+            $this->category_id = $id;
+            $this->title = $category->title;
+            $this->color = $category->color;
 
-        $this->openModal();
+            $this->openModal();
+        } else {
+            session()->flash('message', 'You are not able to go through!');
+            return redirect()->back();        
+        }
     }
 
     public function create()

@@ -17,7 +17,7 @@ class CreateViewnews extends Migration
             $table->id();
             $table->integer('views');
             $table->json('meta_data')->nullable();
-            $table->bigInteger('author_id');
+            $table->string('author_id');
             $table->bigInteger('post_id');
             $table->timestamps();
         });

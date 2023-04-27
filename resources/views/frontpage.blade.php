@@ -30,24 +30,22 @@
             @endif
 
   
-            @if (!Auth::user() == null && Auth::user()->can('article-create'))
-                @if (Request::getPathInfo() == '/dashboard/posts')
-                    <button wire:click="create()"
-                        class="inline-flex items-center px-4 py-2 my-3 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
-                        Create New Post
-                    </button>
-                @endif
+            @if (Request::getPathInfo() == '/dashboard/posts')
+                <button wire:click="create()"
+                    class="inline-flex items-center px-4 py-2 my-3 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
+                    Create New Post
+                </button>
             @endif
             
-            @if ($isOpen)
+            {{-- @if ($isOpen)
                 @include('livewire.posts.create')
-            @endif
+            @endif --}}
             @if (Request::getPathInfo() == '/dashboard/posts')
             <div class="card-body">
                 <table class="table table-borderless table-success">
                     <tr class="bg-gradient-olive">
                         <td colspan="2">
-                            <div class="py-2 h6 m-0 text-center"><b>Popular Articles</b> </div>
+                            <div class="py-2 h6 m-0 text-center"><b>Recommended Articles</b> </div>
                         </td>
                     </tr>
                 </table>
@@ -118,19 +116,14 @@
                                     <button type="submit">READ POST</button>
                                 </form>
                             </a>
-                            @if (!Auth::user() == null && Auth::user()->can('article-edit'))
-                                <button wire:click="edit({{ $post->id }})"
-                                    class="inline-flex items-center px-4 py-2 bg-yellow-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-700 active:bg-yellow-900 focus:outline-none focus:border-yellow-900 focus:shadow-outline-yellow disabled:opacity-25 transition ease-in-out duration-150">
-                                    Edit
-                                </button>
-                            @endif
-
-                            @if (!Auth::user() == null && Auth::user()->can('article-delete'))
-                                <button wire:click="delete({{ $post->id }})"
-                                    class="inline-flex items-center justify-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red active:bg-red-600 transition ease-in-out duration-150">
-                                    Delete
-                                </button>
-                            @endif
+                            <button wire:click="edit({{ $post->id }})"
+                                class="inline-flex items-center px-4 py-2 bg-yellow-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-yellow-700 active:bg-yellow-900 focus:outline-none focus:border-yellow-900 focus:shadow-outline-yellow disabled:opacity-25 transition ease-in-out duration-150">
+                                Edit
+                            </button>
+                            <button wire:click="delete({{ $post->id }})"
+                                class="inline-flex items-center justify-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red active:bg-red-600 transition ease-in-out duration-150">
+                                Delete
+                            </button>
                         </div>
                     </div>
                 @endforeach

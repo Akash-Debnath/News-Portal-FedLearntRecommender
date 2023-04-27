@@ -1,7 +1,5 @@
 <?php
-/**
- * @author MDITech <mditech.net@gmail.com>
- */
+
 
 namespace App\Http\Livewire\Tags;
 
@@ -40,57 +38,72 @@ class Tagposts extends Component
 
     public function store()
     {
-        $this->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'category' => 'required',
-        ]);
+        if (!Auth::user() == null && Auth::user()->can('tag-create')){ 
+            $this->validate([
+                'title' => 'required',
+                'content' => 'required',
+                'category' => 'required',
+            ]);
 
-        $post = Post::updateOrCreate(['id' => $this->post_id], [
-            'title' => $this->title,
-            'content' => $this->content,
-            'category_id' => intVal($this->category),
-            'author_id' => Auth::user()->id,
-        ]);
+            $post = Post::updateOrCreate(['id' => $this->post_id], [
+                'title' => $this->title,
+                'content' => $this->content,
+                'category_id' => intVal($this->category),
+                'author_id' => Auth::user()->id,
+            ]);
 
-        if (count($this->tagids) > 0) {
+            if (count($this->tagids) > 0) {
 
-            DB::table('post_tag')->where('post_id', $post->id)->delete();
+                DB::table('post_tag')->where('post_id', $post->id)->delete();
 
-            foreach ($this->tagids as $tagid) {
-                DB::table('post_tag')->insert([
-                    'post_id' => $post->id,
-                    'tag_id' => intVal($tagid)
-                ]);
+                foreach ($this->tagids as $tagid) {
+                    DB::table('post_tag')->insert([
+                        'post_id' => $post->id,
+                        'tag_id' => intVal($tagid)
+                    ]);
+                }
             }
+
+            session()->flash(
+                'message',
+                $this->post_id ? 'Post Updated Successfully.' : 'Post Created Successfully.'
+            );
+
+            $this->closeModal();
+            $this->resetInputFields();
+        } else {
+            session()->flash('message', 'You are not able to go through!');
+            return redirect()->back();        
         }
-
-        session()->flash(
-            'message',
-            $this->post_id ? 'Post Updated Successfully.' : 'Post Created Successfully.'
-        );
-
-        $this->closeModal();
-        $this->resetInputFields();
     }
 
     public function delete($id)
     {
-        Post::find($id)->delete();
-        session()->flash('message', 'Post Deleted Successfully.');
+        if (!Auth::user() == null && Auth::user()->can('tag-delete')){ 
+            Post::find($id)->delete();
+            session()->flash('message', 'Post Deleted Successfully.');
+        } else {
+            session()->flash('message', 'You are not able to go through!');
+            return redirect()->back();        
+        }
     }
 
     public function edit($id)
     {
-        $post = Post::with('tags')->findOrFail($id);
+        if (!Auth::user() == null && Auth::user()->can('tag-edit')){ 
+            $post = Post::with('tags')->findOrFail($id);
 
-        $this->post_id = $id;
-        $this->title = $post->title;
-        $this->content = $post->content;
-        $this->category = $post->category_id;
-        $this->tagids = $post->tags->pluck('id');
+            $this->post_id = $id;
+            $this->title = $post->title;
+            $this->content = $post->content;
+            $this->category = $post->category_id;
+            $this->tagids = $post->tags->pluck('id');
 
-        $this->openModal();
+            $this->openModal();
+        } else {
+            session()->flash('message', 'You are not able to go through!');
+            return redirect()->back();        
+        }
     }
 
     public function create()

@@ -24,7 +24,7 @@
         <div class="container">
             <div class="row">
               <div class="col">
-                <marquee behavior="scroll" direction="left"><strong>We Believe in Safety</strong></marquee>
+                    <marquee behavior="scroll" direction="left"><strong>We Believe in Safety</strong></marquee>
               </div>
             </div>
         </div>
@@ -40,18 +40,18 @@
                     <div class="text-center text-sm text-gray-500 sm:text-left">
                         <div class="flex items-center">
                             @if (Route::has('login'))
-                            <div class="hidden fixed sm:block">
-                                @auth
-                                    <a href="{{ url('/dashboard') }}" class="text-lg text-gray-700 underline">Dashboard</a>
-                                @else
-                                    <a href="{{ route('login') }}" class="text-lg text-gray-700 underline"><b>Login</b></a>
-            
-                                    @if (Route::has('register'))
-                                        <a href="{{ route('register') }}" class="ml-4 text-lg text-gray-700 underline"><b>Register</b></a>
+                                <div class="hidden fixed sm:block">
+                                    @auth
+                                        <a href="{{ url('dashboard/posts') }}" class="text-lg text-gray-700 underline">Dashboard</a>
+                                    @else
+                                        <a href="{{ route('login') }}" class="text-lg text-gray-700 underline"><b>Login</b></a>
+                
+                                        @if (Route::has('register'))
+                                            <a href="{{ route('register') }}" class="ml-4 text-lg text-gray-700 underline"><b>Register</b></a>
+                                        @endif
                                     @endif
-                                @endif
-                            </div>
-                        @endif
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -11,8 +11,11 @@ use App\Http\Controllers\NewsViewController;
 use App\Http\Controllers\GenerateCSVController;
 use App\Http\Controllers\PythonModelController;
 use App\Http\Livewire\Tags\Tags;
+use App\Http\Livewire\Roles\Roles;
+use App\Http\Livewire\RolesAssign;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\RolesController;
+use App\Http\Controllers\RoleAssignController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -47,37 +50,46 @@ use Illuminate\Support\Facades\Route;
 //     return $author->comments;
 // });
 
-Route::get('/', function () {
-    return view('welcome');
-    // Route::get('dashboard/posts', Posts::class)->name('posts');
-    // Route::get('dashboard/posts/{id}', p::class);   
-});
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-    // return view('livewire.posts.posts');
-})->name('dashboard');
-
-Route::get('dashboard/categories', Categories::class)->name('categories');
-Route::get('dashboard/categories/{id}/posts', Categoryposts::class);
-
-Route::get('dashboard/posts', Posts::class)->name('posts');
-Route::match(['get'],'dashboard/posts/{id}', p::class)->name('postview');
-// Route::match(['post'],'dashboard/posts/{id}', [NewsViewController::class, 'edit']);
-// Route::match(['post'],'dashboard/posts/{id}', function () {
-//     return 'Hello World';
+// Route::get('/', function () {
+//     return view('welcome');
+//     // Route::get('dashboard/posts', Posts::class)->name('posts');
+//     // Route::get('dashboard/posts/{id}', p::class);   
 // });
-// Route::get('dashboard/posts/{id}', p::class);
-// Route::post('dashboard/posts/{id}', [NewsViewController::class, 'store']);
+Route::get('/', Posts::class)->name('posts');
 
-Route::get('dashboard/tags', Tags::class)->name('tags');
-Route::get('dashboard/tags/{id}/posts', Tagposts::class);
 
-Route::post('comments/posts', [CommentApiController::class, 'store']);
-Route::post('likes/posts', [LikeUnlikeController::class, 'store']);
-Route::post('unlikes/posts', [LikeUnlikeController::class, 'unlikesreaction']);
-Route::post('posts/views', [NewsViewController::class, 'store']);
+Route::middleware(['auth:sanctum', 'verified'])->get('dashboard/posts', Posts::class)->name('posts');
 
-Route::get('/hey', [GenerateCSVController::class, 'index']);
-// Route::get('/dashboard/posts', [PythonModelController::class, 'index']);
-// Route::get('/dashboard/py', [PythonModelController::class, 'index']);
+// Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('dashboard/categories', Categories::class)->name('categories');
+    Route::get('dashboard/categories/{id}/posts', Categoryposts::class);
+
+    Route::get('dashboard/posts', Posts::class)->name('posts');
+    Route::match(['get'],'dashboard/posts/{id}', p::class)->name('postview');
+    // Route::match(['post'],'dashboard/posts/{id}', [NewsViewController::class, 'edit']);
+    // Route::match(['post'],'dashboard/posts/{id}', function () {
+    //     return 'Hello World';
+    // });
+    // Route::get('dashboard/posts/{id}', p::class);
+    // Route::post('dashboard/posts/{id}', [NewsViewController::class, 'store']);
+
+    Route::get('dashboard/tags', Tags::class)->name('tags');
+    Route::get('dashboard/tags/{id}/posts', Tagposts::class);
+
+    Route::post('comments/posts', [CommentApiController::class, 'store']);
+    Route::post('likes/posts', [LikeUnlikeController::class, 'store']);
+    Route::post('unlikes/posts', [LikeUnlikeController::class, 'unlikesreaction']);
+    Route::post('posts/views', [NewsViewController::class, 'store']);
+
+    Route::get('/hey', [GenerateCSVController::class, 'index']);
+    // Route::get('/dashboard/posts', [PythonModelController::class, 'index']);
+    // Route::get('/dashboard/py', [PythonModelController::class, 'index']);
+    
+    Route::resource('roles', RolesController::class);
+    // Route::resource('dashboard/roles', RolesController::class);
+    // Route::resource('dashboard/roles', Roles::class);
+    Route::resource('roles-assign', RoleAssignController::class);
+
+
+// });

@@ -37,6 +37,8 @@ class NewsViewController extends Controller
      */
     public function store(Request $request)
     {
+        // $device_mac = shell_exec("cat /sys/class/net/*/address | grep -v '00:00:00:00:00:00' | head -n 1");
+        // dd(shell_exec('ifconfig -a | grep ether | head -n 1 | awk \'{print $2}\''));
         $id = $request->get('id');
         $request->validate([
             'id'   => 'required'
@@ -44,7 +46,14 @@ class NewsViewController extends Controller
         $views = new ViewNews();
         $views->views = 1;
         $views->post_id =  $request->get('id');
-        $views->author_id = Auth::user()->id;
+        // $views->author_id = Auth::user()->id;
+        if (!Auth::user()== null) {
+            $views->author_id = Auth::user()->id;
+        } else {
+            // $views->author_id = $_SERVER['REMOTE_ADDR']; // Use IP address
+            // $views->author_id = exec('getmac'); // Use MAC address on Windows
+            $views->author_id = shell_exec('ifconfig -a | grep ether | head -n 1 | awk \'{print $2}\''); // Use MAC address on Unix/Linux
+        }
         $views->save();
         return Redirect::to('dashboard/posts/'.$id);
     }

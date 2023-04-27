@@ -1,5 +1,3 @@
-{{-- @author MDITech <mditech.net@gmail.com> --}}
-
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Tags
@@ -17,11 +15,15 @@
                   </div>
                 </div>
             @endif
-            <button
-                wire:click="create()"
-                class="inline-flex items-center px-4 py-2 my-3 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
-                Create New Tag
-            </button>
+
+            @if (!Auth::user() == null && Auth::user()->can('tag-create'))
+                <button
+                    wire:click="create()"
+                    class="inline-flex items-center px-4 py-2 my-3 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
+                    Create New Tag
+                </button>
+            @endif
+
             @if($isOpen)
                 @include('livewire.tags.create')
             @endif
@@ -41,19 +43,26 @@
                             <td class="border px-4 py-2"><?php echo ++$i; ?></td>
                             <td class="border px-4 py-2">{{ $tag->title }}</td>
                             <td class="border px-4 py-2">
+                            
+                            @if (!Auth::user() == null && Auth::user()->can('tag-edit'))
                             <button
                                 wire:click="edit({{ $tag->id }})"
                                 class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
                                 Edit
                             </button>
+                            @endif
+
                             <a href="{{ url('dashboard/tags/'. $tag->id .'/posts') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
                                 Show All Posts
                             </a>
+
+                            @if (!Auth::user() == null && Auth::user()->can('tag-delete'))
                             <button
                                 wire:click="delete({{ $tag->id }})"
                                 class="inline-flex items-center justify-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 focus:outline-none focus:border-red-700 focus:shadow-outline-red active:bg-red-600 transition ease-in-out duration-150">
                                 Delete
                             </button>
+                            @endif
                             </td>
                         </tr>
                     @endforeach

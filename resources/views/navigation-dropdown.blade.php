@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('posts') }}">
                         <x-jet-application-mark class="block h-9 w-auto" />
                     </a>
                 </div>
@@ -15,18 +15,21 @@
                     {{-- <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-jet-nav-link> --}}
+                    {{-- @if (!Auth::user() == null && Auth::user()->can('nav-home')) --}}
+                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <x-jet-nav-link href="{{ route('posts') }}" :active="request()->routeIs('posts')">
+                                {{ __('Home') }}
+                            </x-jet-nav-link>
+                        </div>
+                    {{-- @endif --}}
 
-                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <x-jet-nav-link href="{{ route('posts') }}" :active="request()->routeIs('posts')">
-                            {{ __('Home') }}
-                        </x-jet-nav-link>
-                    </div>
-
-                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <x-jet-nav-link href="{{ route('categories') }}" :active="request()->routeIs('categories')">
-                            {{ __('Categories') }}
-                        </x-jet-nav-link>
-                    </div>
+                    @if (!Auth::user() == null && Auth::user()->can('nav-categories'))
+                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <x-jet-nav-link href="{{ route('categories') }}" :active="request()->routeIs('categories')">
+                                {{ __('Categories') }}
+                            </x-jet-nav-link>
+                        </div>
+                    @endif
 
                     {{-- <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-jet-nav-link href="{{ route('posts') }}" :active="request()->routeIs('posts')">
@@ -34,11 +37,31 @@
                         </x-jet-nav-link>
                     </div> --}}
 
-                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <x-jet-nav-link href="{{ route('tags') }}" :active="request()->routeIs('tags')">
-                            {{ __('Tags') }}
-                        </x-jet-nav-link>
-                    </div>
+                    @if (!Auth::user() == null && Auth::user()->can('nav-tag'))
+                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <x-jet-nav-link href="{{ route('tags') }}" :active="request()->routeIs('tags')">
+                                {{ __('Tags') }}
+                            </x-jet-nav-link>
+                        </div>
+                    @endif
+
+                    @if (!Auth::user() == null && Auth::user()->can('nav-rolepermissions'))
+                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <x-jet-nav-link href="{{ url('roles') }}" :active="Illuminate\Support\Str::contains(url()->current(), 'roles') && !Illuminate\Support\Str::contains(url()->current(), 'roles-assign')">
+                                {{ __('Role & Permission') }}
+                            </x-jet-nav-link>
+                        </div>
+                    @endif
+                    
+
+                    @if (!Auth::user() == null && Auth::user()->can('nav-rolepermissions'))
+                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                            <x-jet-nav-link href="{{ url('roles-assign') }}" :active="Illuminate\Support\Str::contains(url()->current(), 'roles-assign') && !Illuminate\Support\Str::contains(url()->current(), 'roles')">
+                                {{ __('Role Assign') }}
+                            </x-jet-nav-link>
+                        </div>
+                    @endif
+                    
                 </div>
             </div>
 
@@ -48,11 +71,11 @@
                     <x-slot name="trigger">
                         @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                             <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-                                <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}" />
+                                <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user() ? (Auth::user()->profile_photo_url) : '' }}" alt="{{ Auth::user()->first_name . 'Unknown' . Auth::user()->last_name }}" />
                             </button>
                         @else
                             <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                                <div>{{ Auth::user()->first_name . ' ' . Auth::user()->last_name }}</div>
+                                <div>{{ Auth::user() ? (Auth::user()->first_name . ' ' . Auth::user()->last_name) : 'Anonymous' }}</div>
 
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -69,9 +92,11 @@
                             {{ __('Manage Account') }}
                         </div>
 
-                        <x-jet-dropdown-link href="{{ route('profile.show') }}">
-                            {{ __('Profile') }}
-                        </x-jet-dropdown-link>
+                        @if(!Auth::user() == null)
+                            <x-jet-dropdown-link href="{{ route('profile.show') }}">
+                                {{ __('Profile') }}
+                            </x-jet-dropdown-link>
+                        @endif
 
                         @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                             <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
@@ -111,17 +136,39 @@
 
                             <div class="border-t border-gray-100"></div>
                         @endif
+                        
+                        @if (Route::has('login'))
+                            {{-- <div class="hidden fixed sm:block"> --}}
+                                @auth
+                                    {{-- <a href="{{ url('dashboard/posts') }}" class="">Dashboard</a> --}}
+                                @else
+                                    {{-- <a href="{{ route('login') }}" class=""><b>Login</b></a> --}}
+                                    <x-jet-dropdown-link href="{{ route('login') }}">
+                                    {{__('Login')}}
+                                    </x-jet-dropdown-link>
+        
+                                    @if (Route::has('register'))
+                                        {{-- <a href="{{ route('register') }}" class=""><b>Register</b></a> --}}
+                                        <x-jet-dropdown-link href="{{ route('register') }}">
+                                            {{__('Register')}}
+                                            </x-jet-dropdown-link>
+                                    @endif
+                                @endif
+                            {{-- </div> --}}
+                        @endif
 
+                        @if(!Auth::user() == null)
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
 
-                            <x-jet-dropdown-link href="{{ route('logout') }}"
-                                                onclick="event.preventDefault();
-                                                            this.closest('form').submit();">
-                                {{ __('Logout') }}
-                            </x-jet-dropdown-link>
-                        </form>
+                                <x-jet-dropdown-link href="{{ route('logout') }}"
+                                                    onclick="event.preventDefault();
+                                                                this.closest('form').submit();">
+                                    {{ __('Logout') }}
+                                </x-jet-dropdown-link>
+                            </form>
+                        @endif
                     </x-slot>
                 </x-jet-dropdown>
             </div>
@@ -141,7 +188,7 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+            <x-jet-responsive-nav-link href="{{ route('posts') }}" :active="request()->routeIs('posts')">
                 {{ __('Dashboard') }}
             </x-jet-responsive-nav-link>
         </div>
@@ -150,12 +197,12 @@
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="flex items-center px-4">
                 <div class="flex-shrink-0">
-                    <img class="h-10 w-10 rounded-full" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                    <img class="h-10 w-10 rounded-full" src="{{ Auth::user() ? (Auth::user()->profile_photo_url) : '' }}" alt="{{ Auth::user() ? (Auth::user()->name) : 'Unknown' }}" />
                 </div>
 
                 <div class="ml-3">
-                    <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                    <div class="font-medium text-base text-gray-800">{{ Auth::user() ? (Auth::user()->name) : 'Unknown' }}</div>
+                    <div class="font-medium text-sm text-gray-500">{{ Auth::user() ? (Auth::user()->email) : '' }}</div>
                 </div>
             </div>
 

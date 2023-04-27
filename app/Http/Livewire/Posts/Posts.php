@@ -69,85 +69,100 @@ class Posts extends Component
 
     public function store()
     {
-        $this->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'category' => 'required',
-            'photos.*' => 'image|max:5120',
-        ]);
+        if (!Auth::user() == null && Auth::user()->can('article-create')){
+            $this->validate([
+                'title' => 'required',
+                'content' => 'required',
+                'category' => 'required',
+                'photos.*' => 'image|max:5120',
+            ]);
 
-        // Update or Insert Post
-        $post = Post::updateOrCreate(['id' => $this->post_id], [
-            'title' => $this->title,
-            'content' => $this->content,
-            'category_id' => intVal($this->category),
-            'author_id' => Auth::user()->id,
-        ]);
+            // Update or Insert Post
+            $post = Post::updateOrCreate(['id' => $this->post_id], [
+                'title' => $this->title,
+                'content' => $this->content,
+                'category_id' => intVal($this->category),
+                'author_id' => Auth::user()->id,
+            ]);
 
-        // Image upload and store name in db
-        if (count($this->photos) > 0) {
-            Image::where('post_id', $post->id)->delete();
-            $counter = 0;
-            foreach ($this->photos as $photo) {
+            // Image upload and store name in db
+            if (count($this->photos) > 0) {
+                Image::where('post_id', $post->id)->delete();
+                $counter = 0;
+                foreach ($this->photos as $photo) {
 
-                $storedImage = $photo->store('public/photos');
+                    $storedImage = $photo->store('public/photos');
 
-                $featured = false;
-                if($counter == 0 ){
-                    $featured = true;
+                    $featured = false;
+                    if($counter == 0 ){
+                        $featured = true;
+                    }
+                    Image::create([
+                        'url' => url('storage'. Str::substr($storedImage, 6)),
+                        'title' => '-',
+                        'post_id' => $post->id,
+                        'featured' => $featured
+                    ]);
+                    $counter++;
                 }
-                Image::create([
-                    'url' => url('storage'. Str::substr($storedImage, 6)),
-                    'title' => '-',
-                    'post_id' => $post->id,
-                    'featured' => $featured
-                ]);
-                $counter++;
             }
-        }
 
-        // Post Tag mapping
-        if (count($this->tagids) > 0) {
-            DB::table('post_tag')->where('post_id', $post->id)->delete();
+            // Post Tag mapping
+            if (count($this->tagids) > 0) {
+                DB::table('post_tag')->where('post_id', $post->id)->delete();
 
-            foreach ($this->tagids as $tagid) {
-                DB::table('post_tag')->insert([
-                    'post_id' => $post->id,
-                    'tag_id' => intVal($tagid),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                foreach ($this->tagids as $tagid) {
+                    DB::table('post_tag')->insert([
+                        'post_id' => $post->id,
+                        'tag_id' => intVal($tagid),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
+
+            session()->flash(
+                'message',
+                $this->post_id ? 'Post Updated Successfully.' : 'Post Created Successfully.'
+            );
+
+            $this->closeModal();
+            $this->resetInputFields();
+        } else {
+            session()->flash('message', 'You are not able to go through!');
+            return redirect()->back();        
         }
-
-        session()->flash(
-            'message',
-            $this->post_id ? 'Post Updated Successfully.' : 'Post Created Successfully.'
-        );
-
-        $this->closeModal();
-        $this->resetInputFields();
     }
 
     public function delete($id)
     {
-        Post::find($id)->delete();
-        DB::table('post_tag')->where('post_id', $id)->delete();
+        if (!Auth::user() == null && Auth::user()->can('article-delete')){
+            Post::find($id)->delete();
+            DB::table('post_tag')->where('post_id', $id)->delete();
 
-        session()->flash('message', 'Post Deleted Successfully.');
+            session()->flash('message', 'Post Deleted Successfully.');
+        } else {
+            session()->flash('message', 'You are not able to go through!');
+            return redirect()->back();        
+        }
     }
 
     public function edit($id)
     {
-        $post = Post::with('tags')->findOrFail($id);
+        if (!Auth::user() == null && Auth::user()->can('article-edit')){
+            $post = Post::with('tags')->findOrFail($id);
 
-        $this->post_id = $id;
-        $this->title = $post->title;
-        $this->content = $post->content;
-        $this->category = $post->category_id;
-        $this->tagids = $post->tags->pluck('id');
+            $this->post_id = $id;
+            $this->title = $post->title;
+            $this->content = $post->content;
+            $this->category = $post->category_id;
+            $this->tagids = $post->tags->pluck('id');
 
-        $this->openModal();
+            $this->openModal();
+        } else {
+            session()->flash('message', 'You are not able to go through!');
+            return redirect()->back();        
+        }
     }
 
     public function create()
