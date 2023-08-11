@@ -114,7 +114,7 @@
                             @foreach($post->images as $key => $image)
                                 @if($key == 0)
                                     <div class="px-2 py-4">
-                                        <img src="{{ $image->url}}" alt="{{ $image->description }}" width="300" height="200" class="rounded-sm">
+                                        <img src="{{ $image->url }}" alt="{{ $image->description }}" width="300" height="200" class="rounded-sm">
                                     </div>
                                 @endif
                             @endforeach
