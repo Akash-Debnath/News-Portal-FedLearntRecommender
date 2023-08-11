@@ -1,11 +1,11 @@
 <x-app-layout>
 <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Role Assign
-    </h2>
+    <h5 class="font-semibold text-xl text-gray-800 leading-tight">
+        <b>Role Assign</b>
+    </h5>
 </x-slot>
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+<div class="py-6">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-2">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
             @if (session()->has('message'))
                 <div class="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md my-3" role="alert">
@@ -20,7 +20,7 @@
             @if (!Auth::user() == null && Auth::user()->can('roleAndPermission-create'))
                 <a href="{{ route('roles-assign.create') }}">
                     <button class="inline-flex items-center px-4 py-2 my-3 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">
-                        Create New Role
+                        Assign New Role
                     </button>
                 </a>
             @endif
@@ -33,11 +33,11 @@
             <table class="table-fixed w-full">
                 <thead>
                     <tr class="bg-gray-100">
-                        <th class="px-4 py-2 w-10">SL.</th>
-                        <th class="px-4 py-2 w-10">UID</th>
-                        <th class="px-2 py-2 w-40">Name</th>
-                        <th class="px-4 py-2 w-20">Role</th>
-                        <th class="px-4 py-2 w-20">Action</th>
+                        {{-- <th class="px-4 py-2 w-10">SL.</th> --}}
+                        <th class="px-4 py-2 w-10 text-center">UID</th>
+                        <th class="px-2 py-2 w-40 text-center">Name</th>
+                        <th class="px-4 py-2 w-20 text-center">Role</th>
+                        <th class="px-4 py-2 w-20 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,8 +45,8 @@
                     <?php $i = $users->currentPage() == 1 ? 0 : ($users->currentPage() - 1) * 15 ?>
                     @foreach($users as $user)
                         <tr>
-                            <td class="border px-4 py-2"><?php echo ++$i; ?></td>
-                            <td class="border px-2 py-2">{{ $user->id }}</td>
+                            {{-- <td class="border px-4 py-2"> echo ++$i; </td> --}}
+                            <td class="border px-2 py-2 text-center">{{ $user->id }}</td>
                             <td class="border px-2 py-2">{{ ucfirst($user->first_name." ".$user->last_name) }}</td>
                             <td class="border px-4 py-2">
                                 {{-- @foreach ($role->permissions as $perm)
@@ -60,7 +60,7 @@
                                     </span>
                                 @endforeach
                             </td>
-                            <td class="border px-4 py-2">
+                            <td class="border px-4 py-2 text-center">
                             {{-- <button
                                 wire:click="edit({{ $role->id }})"
                                 class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150">

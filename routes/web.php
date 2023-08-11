@@ -58,7 +58,7 @@ use App\Http\Controllers\RoleAssignController;
 Route::get('/', Posts::class)->name('posts');
 
 
-Route::middleware(['auth:sanctum', 'verified'])->get('dashboard/posts', Posts::class)->name('posts');
+Route::middleware(['auth:sanctum', 'verified'])->get('dashboard/posts/', Posts::class)->name('posts');
 
 // Route::group(['middleware' => 'auth'], function () {
 

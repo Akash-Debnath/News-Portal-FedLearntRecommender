@@ -16,6 +16,14 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <style>
+            body {
+                background-image: url('https://i.pinimg.com/originals/15/a6/12/15a612675a3d5951293bc3663d81cc8f.png');
+                background-size: cover;
+                background-position: center;
+            }
+        </style>
+        
 
         @livewireStyles
 

@@ -21,6 +21,15 @@
         {{-- <!-- Latest compiled JavaScript -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script> --}}
     
+        <style>
+            html, body {
+                background-image: url('https://i.pinimg.com/originals/15/a6/12/15a612675a3d5951293bc3663d81cc8f.png');
+                background-size: cover;
+                background-position: center;
+                height: 100%;
+            }
+        </style>
+        
     </head>
     <body>
         <div class="font-sans text-gray-900 antialiased">

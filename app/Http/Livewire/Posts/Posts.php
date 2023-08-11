@@ -74,7 +74,7 @@ class Posts extends Component
                 'title' => 'required',
                 'content' => 'required',
                 'category' => 'required',
-                'photos.*' => 'image|max:5120',
+                'photos.*' => 'image|max:10240',
             ]);
 
             // Update or Insert Post

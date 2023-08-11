@@ -1,11 +1,11 @@
 <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Post
-    </h2>
+    <h5 class="font-semibold text-xl text-gray-800 leading-tight">
+        <b>Article</b>
+    </h5>
 </x-slot>
 
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+<div class="py-4 border border-black-300 p-6">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 border border-black-300 p-2">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
             <div class="grid gap-4">
                 <div class="font-bold text-xl mb-2">{{ $post ? $post->title : ''}}</div>
@@ -18,7 +18,7 @@
                 <div class="grid grid-flow-col">
                     @foreach ($post->images as $image)
                         <div class="px-6 py-4">
-                            <img src="{{ $image->url }}" alt="{{ $image->description }}" width="300" height="200">
+                            <img src="{{ $image->url }}" alt="{{ $image->description }}" width="550" height="450" class="rounded-sm">
                         </div>
                     @endforeach
                 </div>

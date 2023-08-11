@@ -1,8 +1,8 @@
 <x-app-layout>
 <x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        Create Role
-    </h2>
+    <h5 class="font-semibold text-xl text-gray-800 leading-tight">
+        <b>Create Role</b>
+    </h5>
 </x-slot>
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
