@@ -5,7 +5,7 @@
 
 
 import pandas as pd
-interactions_df = pd.read_csv('/Users/akashchandradebnath/Sites/laravel-news-main/storage/app/public/usersdata.csv')
+interactions_df = pd.read_csv('/Users/akashchandradebnath/Sites/newsportal/storage/app/public/usersdata.csv')
 
 event_type_strength = {
    'Views': 1.0,

@@ -46,7 +46,7 @@ class Posts extends Component
         Storage::put($filepath, $csv->__toString());
 
 
-        $process = new Process(['python3', '/Users/akashchandradebnath/Sites/laravel-news-main/storage/app/public/FLR.py']); 
+        $process = new Process(['python3', '/Users/akashchandradebnath/Sites/newsportal/storage/app/public/FLR.py']); 
         $process->run(); 
         // if (!$process->isSuccessful()) { 
         //     throw new ProcessFailedException($process);

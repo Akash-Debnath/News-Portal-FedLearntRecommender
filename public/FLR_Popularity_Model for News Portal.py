@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 
 #Load data from user interactions dataset
 
-interactions_df = pd.read_csv('/Users/akashchandradebnath/Sites/laravel-news-main/storage/app/public/usersdata.csv')
+interactions_df = pd.read_csv('/Users/akashchandradebnath/Sites/newsportal/storage/app/public/usersdata.csv')
 interactions_df.head(10)
 
 
